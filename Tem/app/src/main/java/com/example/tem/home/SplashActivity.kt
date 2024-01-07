@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.example.tem.MainActivity
+import com.example.tem.PushPermissionDialogFragment
 import com.example.tem.databinding.ActivitySplashBinding
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
@@ -46,9 +47,11 @@ class SplashActivity : AppCompatActivity() {
                         //로그인 필요
                         startActivity(Intent(this@SplashActivity, StartActivity::class.java))
                     }
-                    else {
-                        //기타 에러
-                    }
+                    Log.d("error", error.toString())
+                    startActivity(Intent(this@SplashActivity, StartActivity::class.java))
+//                    else {
+//                        //기타 에러
+//                    }
                 }
                 else {
                     //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
@@ -65,37 +68,37 @@ class SplashActivity : AppCompatActivity() {
     }
 
     // 권한 설정 후 반환 값에 따른 분기 처리
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == 10){
-            Log.d("request", requestCode.toString())
-
-            // 권한 승인된 경우
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                Toast.makeText(this, "알림 설정 허가", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this@SplashActivity, StartActivity::class.java))
-            }else{
-                // 권한 불허 경우
-                TedPermission.create()
-                    .setPermissionListener(object: PermissionListener{
-                        override fun onPermissionGranted() {
-                            checkKakaoLogin()
-                        }
-
-                        override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                            checkPermission()
-                        }
-                    })
-                    .setDeniedMessage("푸시 알림 권한을 허용해야 이용 가능합니다.")
-                    .setPermissions(Manifest.permission.POST_NOTIFICATIONS)
-                    .check()
-            }
-        }
-    }
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray,
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if(requestCode == 10){
+//            Log.d("request", requestCode.toString())
+//
+//            // 권한 승인된 경우
+//            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+////                Toast.makeText(this, "알림 설정 허가", Toast.LENGTH_SHORT).show()
+//                startActivity(Intent(this@SplashActivity, StartActivity::class.java))
+//            }else{
+//                // 권한 불허 경우
+//                TedPermission.create()
+//                    .setPermissionListener(object: PermissionListener{
+//                        override fun onPermissionGranted() {
+//                            checkKakaoLogin()
+//                        }
+//
+//                        override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+//                            checkPermission()
+//                        }
+//                    })
+//                    .setDeniedMessage("푸시 알림 권한을 허용해야 이용 가능합니다.")
+//                    .setPermissions(Manifest.permission.POST_NOTIFICATIONS)
+//                    .check()
+//            }
+//        }
+//    }
 
     // 권한 확인
     fun checkPermission() {
@@ -105,30 +108,29 @@ class SplashActivity : AppCompatActivity() {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             Log.d("check", "true")
-            // Android 버전 확인
-            // Android 13 이후 버전은 권한 요청 창 생성
-            // Android 12 이하는 권한 요청 창 생성되지 않음 -> 유저가 설정을 하도록 유도
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    10
-                )
-            } else {
-                // Android 12이하 버전일 경우 -> 알림 채널을 만들어야함
+//            // Android 버전 확인
+//            // Android 13 이후 버전은 권한 요청 창 생성
+//            // Android 12 이하는 권한 요청 창 생성되지 않음 -> 유저가 설정을 하도록 유도
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                ActivityCompat.requestPermissions(
+//                    this,
+//                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+//                    10
+//                )
+//            } else {
+//                // Android 12이하 버전일 경우 -> 알림 채널을 만들어야함
+//
+//            }
 
-            }
+            //푸시 알림 창 커스텀화
+            showPushPermissionDialogFragment()
         } else {
             // 권한 설정이 된 경우
             checkKakaoLogin()
         }
     }
 
-    // Android 설정창으로 이동
-    fun gotoSetting(){
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        val uri = Uri.fromParts("package", packageName, null)
-        intent.data = uri
-        startActivity(intent)
+    private fun showPushPermissionDialogFragment(){
+        PushPermissionDialogFragment().show(supportFragmentManager, PushPermissionDialogFragment.TAG)
     }
 }

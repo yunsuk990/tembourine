@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.app.ActivityCompat.PermissionCompatDelegate
 import com.example.tem.MainActivity
 import com.example.tem.databinding.ActivityStartBinding
 import com.kakao.sdk.auth.model.OAuthToken
