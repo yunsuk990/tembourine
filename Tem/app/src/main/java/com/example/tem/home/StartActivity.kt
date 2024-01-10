@@ -54,6 +54,7 @@ class StartActivity : AppCompatActivity() {
                 }
                 else if (token != null) {
                     Log.i(KAKAO_TAG, "로그인 성공 ${token.accessToken}")
+                    UserApiClient.instance.loginWithKakaoAccount(this@StartActivity, callback = callback)
                 }
             }
         }else{
