@@ -35,7 +35,7 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         //카카오 로그아웃
-        UserApiClient.instance.logout {  }
+        //UserApiClient.instance.logout {  }
         checkPermission()
     }
 
