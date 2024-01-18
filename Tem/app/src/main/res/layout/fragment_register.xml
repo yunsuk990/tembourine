@@ -68,7 +68,7 @@
         app:layout_constraintLeft_toLeftOf="@id/place_item"
         app:layout_constraintTop_toBottomOf="@id/place_item" />
 
-    <EditText
+    <TextView
         android:id="@+id/item_buy"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
         app:layout_constraintLeft_toLeftOf="@id/place_item"
         app:layout_constraintTop_toBottomOf="@id/item_name" />
 
-    <EditText
+    <TextView
         android:id="@+id/item_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

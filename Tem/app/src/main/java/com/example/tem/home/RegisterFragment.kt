@@ -22,6 +22,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.tem.R
@@ -129,6 +130,14 @@ class RegisterFragment : Fragment() {
         spinner.adapter = adapter
         binding.backBtn.setOnClickListener {
             registerFragment(HomeFragment(),"1")
+        }
+        binding.itemBuy.setOnClickListener {
+            val dialogFragment = DatePickerFragment.newInstance(1)
+            dialogFragment.show(childFragmentManager, "datePicker")
+        }
+        binding.itemDate.setOnClickListener {
+            val dialogFragment = DatePickerFragment.newInstance(2)
+            dialogFragment.show(childFragmentManager, "datePicker")
         }
         return view
     }
