@@ -170,9 +170,9 @@
     <Spinner
         android:id="@+id/spin_reg"
         android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@id/swith_arm"
+        android:background="@drawable/spinner_back"
         app:layout_constraintTop_toBottomOf="@id/swith_arm"
         app:layout_constraintRight_toRightOf="@id/swith_arm"/>
     <TextView

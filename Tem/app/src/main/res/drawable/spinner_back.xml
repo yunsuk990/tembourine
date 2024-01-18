@@ -1,23 +1,7 @@
-<vector
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
-    android:width="50dp"
-    android:height="16dp"
-    android:viewportWidth="50"
-    android:viewportHeight="16"
-    >
-    <group>
-        <clip-path
-            android:pathData="M0 0H50V16H0V0Z"
-            />
-        <path
-            android:pathData="M0 0V16H50V0"
-            android:fillColor="#FFFFFF"
-            />
-        <path
-            android:pathData="M0 0H50V16H0V0Z"
-            android:strokeWidth="2"
-            android:strokeColor="#000000"
-            />
-    </group>
-</vector>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/white" /> <!-- 검은색 --><!-- 테두리의 라운드 처리를 위한 설정 (선택사항) -->
+    <stroke
+        android:width="2dp"
+        android:color="#000000" /> <!-- 테두리의 색상 -->
+</shape>
