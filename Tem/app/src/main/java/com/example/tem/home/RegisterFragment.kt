@@ -1,6 +1,11 @@
 package com.example.tem.home
 
+import android.app.Activity
+import android.app.AlarmManager
+import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -9,12 +14,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
@@ -22,11 +28,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.tem.R
-import com.example.tem.databinding.FragmentHomeBinding
 import com.example.tem.databinding.FragmentRegisterBinding
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
@@ -34,13 +38,18 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 
-class RegisterFragment : Fragment() {
+class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var binding: FragmentRegisterBinding
     private val cycle= mutableListOf<String>()
     private var title:String?=null
     var var_img:Bitmap?=null
+
+    var customArgument = 0;
+    var startCalendar: Calendar? = null
+    var endCalendar: Calendar? = null
 
     lateinit var resultLauncher: ActivityResultLauncher<Intent>
     lateinit var resultLauncher_g: ActivityResultLauncher<Intent>
@@ -132,13 +141,35 @@ class RegisterFragment : Fragment() {
             registerFragment(HomeFragment(),"1")
         }
         binding.itemBuy.setOnClickListener {
+            customArgument = 1
             val dialogFragment = DatePickerFragment.newInstance(1)
             dialogFragment.show(childFragmentManager, "datePicker")
         }
         binding.itemDate.setOnClickListener {
+            customArgument = 2
             val dialogFragment = DatePickerFragment.newInstance(2)
             dialogFragment.show(childFragmentManager, "datePicker")
         }
+
+        binding.btnReg.setOnClickListener {
+            if(binding.itemName.text.isEmpty()){
+                Toast.makeText(requireContext(), "상품명을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else if(startCalendar == null ){
+                Toast.makeText(requireContext(), "구입한 날짜를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }else if(endCalendar == null){
+                Toast.makeText(requireContext(), "사용 기한 날짜를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }else{
+                // 반복주기 설정됐을시
+                if(binding.swithArm.isSelected){
+//                    startAlarm(endCalendar!!, binding.itemName.text.toString(), findId  )
+                }else{
+                    startAlarm(endCalendar!!, binding.itemName.text.toString(), null)
+                }
+                registerFragment(HomeFragment(),"1")
+            }
+
+        }
+
         return view
     }
     private fun requestGallary() {
@@ -247,6 +278,60 @@ class RegisterFragment : Fragment() {
             .setDeniedMessage("카메라 권한을 허용해 주세요.")
             .setPermissions(android.Manifest.permission.CAMERA)
             .check()
+    }
+
+
+    private fun startAlarm(c: Calendar, name: String, repeat: Int?) {
+        val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireContext(), AlertReceiver::class.java)
+        intent.putExtra("name", name)
+        val pendingIntent =
+            PendingIntent.getBroadcast(requireContext(), 1, intent, PendingIntent.FLAG_IMMUTABLE)
+        if (repeat != null) {
+//            val repeatInterval = 10000L * repeat
+            val repeatInterval = AlarmManager.INTERVAL_DAY * repeat
+            alarmManager.setRepeating(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + repeatInterval, repeatInterval,
+                pendingIntent
+            )
+        } else {
+
+            // 설정한 시간이 현재 시간 전이라면 날짜에 +1
+//            if (c.before(Calendar.getInstance())) {
+//                c.add(Calendar.DATE, 1)
+//            }
+            Log.d("alarm", "알람 설정(반복주기없음)")
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
+        }
+    }
+
+    override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
+        val selectedDate = String.format("%04d-%02d-%02d", p1, p2 + 1, p3)
+
+        // 호출한 Fragment의 ItemBuy TextView를 찾아서 텍스트를 설정합니다.
+//        val parentFragment = parentFragment
+//        if (parentFragment is Fragment) {
+//            var itemBuyTextView : TextView?
+//            if(customArgument ==1){
+//                itemBuyTextView = parentFragment.view?.findViewById<TextView>(R.id.item_buy)
+//            }
+//            else{
+//                itemBuyTextView = parentFragment.view?.findViewById<TextView>(R.id.item_date)
+//            }
+//            itemBuyTextView?.text = selectedDate
+//        }
+        val c = Calendar.getInstance()
+        c.set(Calendar.YEAR, p1)
+        c.set(Calendar.MONTH, p2)
+        c.set(Calendar.DATE, p3)
+        if (customArgument == 1) {
+            binding.itemBuy.text = selectedDate
+            startCalendar = c
+        } else {
+            binding.itemDate.text = selectedDate
+            endCalendar = c
+        }
     }
 
 }

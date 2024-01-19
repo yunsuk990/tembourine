@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.view.WindowManager.LayoutParams
 import androidx.fragment.app.DialogFragment
 import com.example.tem.databinding.DialogSignoutBinding
+import com.kakao.sdk.user.UserApiClient
 
 class SignOutCustomDialog: DialogFragment() {
 
@@ -25,6 +26,14 @@ class SignOutCustomDialog: DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogSignoutBinding.inflate(layoutInflater)
+
+        binding.dialogQuitBt.setOnClickListener {
+            dismiss()
+        }
+
+        binding.dialogSubmitBt.setOnClickListener {
+            signOut()
+        }
         return binding.root
     }
 
@@ -41,5 +50,9 @@ class SignOutCustomDialog: DialogFragment() {
         dialog?.window?.attributes = params as LayoutParams
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+    private fun signOut(){
+
     }
 }

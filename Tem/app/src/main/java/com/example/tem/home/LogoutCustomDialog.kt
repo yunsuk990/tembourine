@@ -1,6 +1,7 @@
 package com.example.tem.home
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
@@ -11,6 +12,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.example.tem.databinding.DialogLogoutBinding
+import com.kakao.sdk.user.UserApiClient
+import kotlin.math.log
 
 class LogoutCustomDialog: DialogFragment() {
 
@@ -25,6 +28,15 @@ class LogoutCustomDialog: DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogLogoutBinding.inflate(layoutInflater)
+
+        binding.dialogQuitBt.setOnClickListener {
+            dismiss()
+        }
+
+        binding.dialogSubmitBt.setOnClickListener {
+            logOut()
+        }
+
         return binding.root
     }
 
@@ -41,5 +53,11 @@ class LogoutCustomDialog: DialogFragment() {
         dialog?.window?.attributes = params as WindowManager.LayoutParams
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+    private fun logOut(){
+        UserApiClient.instance.logout {
+            startActivity(Intent(context, StartActivity::class.java))
+        }
     }
 }
