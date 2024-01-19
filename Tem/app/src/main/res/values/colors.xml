@@ -15,4 +15,7 @@
     <color name="switch_off">#DCE0E5</color>
     <color name="setting_cardview">#EFF4FB</color>
 
+    <color name="dark_gray">#696969</color>
+    <color name="btn_blue">#0049B7</color>
+
 </resources>
