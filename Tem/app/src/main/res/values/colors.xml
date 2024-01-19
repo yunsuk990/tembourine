@@ -10,4 +10,9 @@
     <color name="gray">#9E9E9E</color>
     <color name="light_gray">#FAFAFA</color>
     <color name="blue">#2332A8</color>
+    <color name="light_blue">#0233A8</color>
+    <color name="green">#2EC147</color>
+    <color name="switch_off">#DCE0E5</color>
+    <color name="setting_cardview">#EFF4FB</color>
+
 </resources>

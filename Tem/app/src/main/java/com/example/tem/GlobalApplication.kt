@@ -1,6 +1,6 @@
 package com.example.tem
-
 import android.app.Application
+import android.os.Build
 import com.kakao.sdk.common.KakaoSdk
 
 val NATIVE_APP_KEY = "0670cef2ebb2dba78e1fb26489487bb5"
