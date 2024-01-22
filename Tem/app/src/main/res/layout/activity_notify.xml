@@ -89,7 +89,7 @@
                 app:showText="false"
                 android:layout_gravity="center"
                 android:thumb="@drawable/switch_thumb"
-                app:track="@drawable/selector_swtich"
+                app:track="@drawable/selector_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
