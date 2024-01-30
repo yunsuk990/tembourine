@@ -309,6 +309,14 @@ class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             .setPermissions(android.Manifest.permission.CAMERA)
             .check()
     }
+    private fun visible_cycle(){
+        binding.txtCy.visibility=View.VISIBLE
+        binding.spinReg.visibility=View.VISIBLE
+    }
+    private fun invisible_cycle(){
+        binding.txtCy.visibility=View.INVISIBLE
+        binding.spinReg.visibility=View.INVISIBLE
+    }
 
 
     private fun startAlarm(c: Calendar, name: String, repeat: Int) {
