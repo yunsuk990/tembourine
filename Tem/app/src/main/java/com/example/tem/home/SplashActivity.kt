@@ -1,30 +1,18 @@
 package com.example.tem.home
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.provider.Settings
-import android.se.omapi.Session
+import android.content.pm.PackageManager import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.example.tem.MainActivity
 import com.example.tem.PushPermissionDialogFragment
 import com.example.tem.databinding.ActivitySplashBinding
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.normal.TedPermission
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
+
 
 
 class SplashActivity : AppCompatActivity() {
@@ -34,8 +22,6 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //카카오 로그아웃
-        //UserApiClient.instance.logout {  }
         checkPermission()
     }
 

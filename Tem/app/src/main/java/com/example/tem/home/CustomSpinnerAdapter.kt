@@ -15,6 +15,15 @@ class CustomSpinnerAdapter(
     private val values: Array<String>
 ) : ArrayAdapter<String>(context, R.layout.custom_spinner_item, values) {
 
+    interface MyItemClickListener {
+        fun itemClick(position: Int)
+    }
+
+    private var myItemClickListener: MyItemClickListener? = null
+    fun setMyItemClickListener(myItemClickListener: MyItemClickListener){
+        this.myItemClickListener = myItemClickListener
+    }
+
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         return getCustomView(position, convertView, parent, R.layout.custom_spinner_item)
     }
@@ -33,6 +42,7 @@ class CustomSpinnerAdapter(
         val row = convertView ?: inflater.inflate(layoutResourceId, parent, false)
         val label = row.findViewById<TextView>(R.id.spinnerText)
         label.text = values[position]
+        myItemClickListener?.itemClick(position)
         // Customize as needed
         return row
     }

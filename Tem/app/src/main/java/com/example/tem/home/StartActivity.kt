@@ -12,6 +12,7 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.kakao.sdk.user.model.User
 
 class StartActivity : AppCompatActivity() {
 
@@ -42,6 +43,7 @@ class StartActivity : AppCompatActivity() {
             }
         }
 
+        // 카카오톡 앱 설치된 경우
         if(UserApiClient.instance.isKakaoTalkLoginAvailable(this@StartActivity)){
             UserApiClient.instance.loginWithKakaoTalk(this@StartActivity) { token, error ->
                 if (error != null) {
@@ -58,6 +60,7 @@ class StartActivity : AppCompatActivity() {
                 }
             }
         }else{
+            // 웹 카카오계정 접속
             UserApiClient.instance.loginWithKakaoAccount(this@StartActivity, callback = callback)
         }
     }

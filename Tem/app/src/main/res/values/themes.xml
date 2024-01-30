@@ -6,4 +6,5 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/white</item>
     </style>
+
 </resources>

@@ -1,6 +1,11 @@
 package com.example.tem.home
 
+import android.app.Activity
+import android.app.AlarmManager
+import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -9,24 +14,25 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.CompoundButton
+import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.tem.R
-import com.example.tem.databinding.FragmentHomeBinding
 import com.example.tem.databinding.FragmentRegisterBinding
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
@@ -34,13 +40,19 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 
-class RegisterFragment : Fragment() {
+class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var binding: FragmentRegisterBinding
     private val cycle= mutableListOf<String>()
     private var title:String?=null
     var var_img:Bitmap?=null
+
+    var customArgument = 0;
+    var startCalendar: Calendar? = null
+    var endCalendar: Calendar? = null
+    var spinnerPos: Int? = null
 
     lateinit var resultLauncher: ActivityResultLauncher<Intent>
     lateinit var resultLauncher_g: ActivityResultLauncher<Intent>
@@ -121,24 +133,73 @@ class RegisterFragment : Fragment() {
             requestGallary()
             //requestPermission()
         }
+
         if(title!=null){
             binding.placeItem.text=title
         }
+
+        // 알람 주기 설정
         val spinner:Spinner=binding.spinReg
         val items= arrayOf("7일","14일","30일","60일")
         val adapter = CustomSpinnerAdapter(requireContext(), items)
+        adapter.setMyItemClickListener(object: CustomSpinnerAdapter.MyItemClickListener{
+            override fun itemClick(position: Int) {
+                spinnerPos = position
+            }
+        })
         spinner.adapter = adapter
+
+        //뒤로 가기
         binding.backBtn.setOnClickListener {
             registerFragment(HomeFragment(),"1")
         }
+
+        //시작 날짜 설정
         binding.itemBuy.setOnClickListener {
+            customArgument = 1
             val dialogFragment = DatePickerFragment.newInstance(1)
             dialogFragment.show(childFragmentManager, "datePicker")
         }
+
+        //마감 날짜 설정
         binding.itemDate.setOnClickListener {
+            customArgument = 2
             val dialogFragment = DatePickerFragment.newInstance(2)
             dialogFragment.show(childFragmentManager, "datePicker")
         }
+
+        // 반복알림 스위치에 따른 반복주기 보여주기
+        binding.swithArm.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener{
+            override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+               if (p1){
+                   binding.settingNotifyCl.visibility = View.VISIBLE
+               }else{
+                   binding.settingNotifyCl.visibility = View.INVISIBLE
+               }
+            }
+        })
+
+        binding.btnReg.setOnClickListener {
+            if(binding.itemName.text.isEmpty()){
+                Toast.makeText(requireContext(), "상품명을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else if(startCalendar == null ){
+                Toast.makeText(requireContext(), "구입한 날짜를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }else if(endCalendar == null){
+                Toast.makeText(requireContext(), "사용 기한 날짜를 선택해주세요.", Toast.LENGTH_SHORT).show()
+            }else{
+                // 반복주기 설정됐을시
+                if(binding.swithArm.isChecked){
+                    var num = items[spinnerPos!!].split("일")
+                    Log.d("spinnerPos", num[0])
+                    startAlarm(endCalendar!!, binding.itemName.text.toString(), num[0].toInt())
+                }else{
+                    startAlarm(endCalendar!!, binding.itemName.text.toString(), 0)
+                }
+                registerFragment(HomeFragment(),"1")
+            }
+
+        }
+
         return view
     }
     private fun requestGallary() {
@@ -247,6 +308,76 @@ class RegisterFragment : Fragment() {
             .setDeniedMessage("카메라 권한을 허용해 주세요.")
             .setPermissions(android.Manifest.permission.CAMERA)
             .check()
+    }
+
+
+    private fun startAlarm(c: Calendar, name: String, repeat: Int) {
+        val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireContext(), AlertReceiver::class.java)
+        intent.putExtra("name", name)
+        intent.putExtra("repeat", repeat)
+        Log.d("repeat", repeat.toString())
+
+        // DB에 requestCode 저장하고 불러오기
+        val pendingIntent =
+            PendingIntent.getBroadcast(requireContext(), 1, intent, PendingIntent.FLAG_IMMUTABLE)
+        if (repeat != 0) {
+//            val repeatInterval = 1000L * repeat
+            val repeatInterval = AlarmManager.INTERVAL_DAY * repeat
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                startCalendar!!.timeInMillis, repeatInterval,
+                pendingIntent
+            )
+        } else {
+
+//             설정한 시간이 현재 시간 전이라면 날짜에 +1
+            if (c.before(Calendar.getInstance())) {
+                c.add(Calendar.DATE, 1)
+            }
+
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
+        }
+    }
+
+    override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
+        val selectedDate = String.format("%04d-%02d-%02d", p1, p2 + 1, p3)
+
+        // 호출한 Fragment의 ItemBuy TextView를 찾아서 텍스트를 설정합니다.
+//        val parentFragment = parentFragment
+//        if (parentFragment is Fragment) {
+//            var itemBuyTextView : TextView?
+//            if(customArgument ==1){
+//                itemBuyTextView = parentFragment.view?.findViewById<TextView>(R.id.item_buy)
+//            }
+//            else{
+//                itemBuyTextView = parentFragment.view?.findViewById<TextView>(R.id.item_date)
+//            }
+//            itemBuyTextView?.text = selectedDate
+//        }
+        val c = Calendar.getInstance()
+        c.set(Calendar.YEAR, p1)
+        c.set(Calendar.MONTH, p2)
+        c.set(Calendar.DATE, p3)
+        c.set(Calendar.HOUR_OF_DAY, 10)
+        c.set(Calendar.MINUTE, 0)
+        c.set(Calendar.SECOND,0)
+        if (customArgument == 1) {
+            binding.itemBuy.text = selectedDate
+            startCalendar = c
+        } else {
+            binding.itemDate.text = selectedDate
+            endCalendar = c
+        }
+    }
+
+
+    // 알람취소하기
+    private fun cancelAlarm(requestId: Int) {
+        val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireContext(), AlertReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(requireContext(), requestId, intent, PendingIntent.FLAG_IMMUTABLE)
+        alarmManager.cancel(pendingIntent)
     }
 
 }

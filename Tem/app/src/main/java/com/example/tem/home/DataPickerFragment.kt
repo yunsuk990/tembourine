@@ -1,6 +1,7 @@
 package com.example.tem.home
 
 import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
@@ -10,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.example.tem.R
 import java.util.Calendar
 
-class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
+class DatePickerFragment : DialogFragment() {
 
     private var customArgument: Int = 0
     companion object {
@@ -37,24 +38,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
-
-        return DatePickerDialog(requireActivity(), this, year, month, day)
-    }
-
-    override fun onDateSet(datePicker: DatePicker?, year: Int, month: Int, day: Int) {
-        val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, day)
-
-        // 호출한 Fragment의 ItemBuy TextView를 찾아서 텍스트를 설정합니다.
-        val parentFragment = parentFragment
-        if (parentFragment is Fragment) {
-            var itemBuyTextView :TextView?
-            if(customArgument ==1){
-                itemBuyTextView = parentFragment.view?.findViewById<TextView>(R.id.item_buy)
-            }
-            else{
-                itemBuyTextView = parentFragment.view?.findViewById<TextView>(R.id.item_date)
-            }
-            itemBuyTextView?.text = selectedDate
-        }
+        var datePicker = DatePickerDialog(requireContext(), parentFragment as OnDateSetListener, year, month, day)
+        return datePicker
     }
 }
