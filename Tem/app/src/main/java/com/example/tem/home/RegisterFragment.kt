@@ -130,8 +130,8 @@ class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             Log.d("위치",title.toString())
         }
         binding.regImg.setOnClickListener {
-            requestGallary()
-            //requestPermission()
+            //requestGallary()
+            requestPermission()
         }
 
         if(title!=null){
@@ -308,6 +308,14 @@ class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             .setDeniedMessage("카메라 권한을 허용해 주세요.")
             .setPermissions(android.Manifest.permission.CAMERA)
             .check()
+    }
+    private fun visible_cycle(){
+        binding.txtCy.visibility=View.VISIBLE
+        binding.spinReg.visibility=View.VISIBLE
+    }
+    private fun invisible_cycle(){
+        binding.txtCy.visibility=View.INVISIBLE
+        binding.spinReg.visibility=View.INVISIBLE
     }
 
 

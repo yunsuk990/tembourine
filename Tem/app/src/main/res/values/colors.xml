@@ -17,5 +17,6 @@
 
     <color name="dark_gray">#696969</color>
     <color name="btn_blue">#0049B7</color>
+    <color name="link_color">#5C4EFF</color>
 
 </resources>
