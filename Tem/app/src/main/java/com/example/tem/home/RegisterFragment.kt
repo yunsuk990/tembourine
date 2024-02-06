@@ -130,8 +130,8 @@ class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             Log.d("위치",title.toString())
         }
         binding.regImg.setOnClickListener {
-            requestGallary()
-            //requestPermission()
+            //requestGallary()
+            requestPermission()
         }
 
         if(title!=null){
