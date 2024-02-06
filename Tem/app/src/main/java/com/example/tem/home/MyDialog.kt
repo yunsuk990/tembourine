@@ -30,7 +30,7 @@ class MyDialog(private val HomeFragment:Fragment) {
 
             dlg.dismiss()
         }
-        binding.nope.setOnClickListener {
+        binding.cancel.setOnClickListener {
             dlg.dismiss()
         }
 
