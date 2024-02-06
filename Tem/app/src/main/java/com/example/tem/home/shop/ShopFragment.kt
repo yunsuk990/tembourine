@@ -17,7 +17,7 @@ import com.example.tem.home.HomeFragment
 import com.example.tem.home.model.SearchData
 
 
-class ShopFragment : Fragment(),AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener  {
+class ShopFragment : Fragment(),AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener{
 
     lateinit var binding: FragmentShopBinding
     private lateinit var searchHistoryRVAdapter: ShopSearchHistoryRVAdapter
@@ -48,6 +48,19 @@ class ShopFragment : Fragment(),AdapterView.OnItemSelectedListener, SearchView.O
         recentSearchRankRecyclerViewSetting()
 
         //검색 창 UI
+        binding.shopSv.setOnQueryTextFocusChangeListener { view, b ->
+            when(b){
+                true -> {
+                    Log.d("searchView", "focused")
+                    binding.shopSearchSettingLinear.visibility = View.VISIBLE
+                    handleSearchViewUi()
+                }
+                false -> {
+                    Log.d("searchView", "unfocused")
+                    binding.shopSearchSettingLinear.visibility = View.GONE
+                }
+            }
+        }
         handleSearchViewUi()
 
         binding.shopBackIv.setOnClickListener {
@@ -149,8 +162,8 @@ class ShopFragment : Fragment(),AdapterView.OnItemSelectedListener, SearchView.O
     override fun onQueryTextSubmit(query: String?): Boolean {
         Log.d("onQueryTextSubmit", "onQueryTextSubmit() called / query: $query")
         if(!query.isNullOrEmpty()){
-            insertSearchTermHistory(query)
             goLink(query)
+            insertSearchTermHistory(query)
             binding.shopSv.setQuery("", false)
             handleSearchViewUi()
         }
@@ -194,12 +207,10 @@ class ShopFragment : Fragment(),AdapterView.OnItemSelectedListener, SearchView.O
 
         if(this.searchHistoryList.size > 0){
             binding.shopSearchHistoryRv.visibility = View.VISIBLE
-            binding.shopSearchRecentTv.visibility = View.VISIBLE
-            binding.shopSearchDeleteAllTv.visibility = View.VISIBLE
+            binding.shopSearchSettingDetailLinear.visibility = View.VISIBLE
         } else {
+            binding.shopSearchSettingDetailLinear.visibility = View.GONE
             binding.shopSearchHistoryRv.visibility = View.GONE
-            binding.shopSearchRecentTv.visibility = View.GONE
-            binding.shopSearchDeleteAllTv.visibility = View.GONE
         }
 
     }
