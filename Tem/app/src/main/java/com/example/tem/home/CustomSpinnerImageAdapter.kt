@@ -4,21 +4,18 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.ImageView
-import android.widget.TextView
 import com.example.tem.R
-import com.example.tem.Shop
 
 
 class CustomSpinnerImageAdapter() : BaseAdapter() {
 
     var context: Context?  = null
-    var values: List<Shop>? = null
+    var values: List<Int>? = null
 
 
-    constructor(context: Context, values: List<Shop>) : this() {
+    constructor(context: Context, values: List<Int>) : this() {
         this.context = context
         this.values = values
     }
@@ -36,7 +33,7 @@ class CustomSpinnerImageAdapter() : BaseAdapter() {
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
         val view = LayoutInflater.from(context).inflate(R.layout.custom_spinner_image_item, null)
         val image = view.findViewById<ImageView>(R.id.spinnerImage)
-        image.setImageResource(values!!.get(p0).getImage()!!)
+        image.setImageResource(values!!.get(p0))
         return view
     }
 }
