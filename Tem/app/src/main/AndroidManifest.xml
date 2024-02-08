@@ -21,6 +21,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/tambourine_logo"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Base.Theme.Tem"
         tools:targetApi="31">
         <activity

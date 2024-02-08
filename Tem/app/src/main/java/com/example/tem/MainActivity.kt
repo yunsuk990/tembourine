@@ -1,21 +1,17 @@
 package com.example.tem
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.tem.databinding.ActivityMainBinding
-import com.example.tem.home.AlertReceiver
 import com.example.tem.home.HomeFragment
 import java.util.Calendar
 import com.example.tem.home.BookmarkFragment
 import com.example.tem.home.SettingFragment
-import com.example.tem.home.ShopFragment
+import com.example.tem.home.shop.ShopFragment
 
 class MainActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
