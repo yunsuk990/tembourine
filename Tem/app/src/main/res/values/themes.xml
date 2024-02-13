@@ -6,5 +6,12 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/white</item>
     </style>
+    <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:datePickerStyle">@style/CustomDatePickerStyle</item>
+    </style>
+
+    <style name="CustomDatePickerStyle">
+        <item name="android:datePickerMode">spinner</item>
+    </style>
 
 </resources>

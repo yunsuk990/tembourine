@@ -17,13 +17,13 @@ class HomeFragment : Fragment(),MyDialogListener {
     private lateinit var binding: FragmentHomeBinding
     private val data= mutableListOf<String>()
     private val myItemList = mutableListOf<MyItem>()
+    private lateinit var place:String
     private fun registerFragment(fragment: Fragment, title: String) {
         val fragmentManager = requireActivity().supportFragmentManager
         fragmentManager.beginTransaction()
             .replace(R.id.main_frm, fragment)
             .commit()
-        (fragment.view?.findViewById<TextView>(R.id.place_item))?.text = title
-        Log.d("체크용",(fragment.view?.findViewById<TextView>(R.id.place_item))?.text.toString())
+        place=title
         Log.d("체",title)
     }
     override fun onCreateView(
