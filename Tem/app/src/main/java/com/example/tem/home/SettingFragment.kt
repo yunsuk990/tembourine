@@ -1,10 +1,14 @@
 package com.example.tem.home
 
+import android.content.Context
 import android.content.Intent
+import android.hardware.input.InputManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import com.example.tem.databinding.FragmentSettingBinding
 
@@ -28,4 +32,6 @@ class SettingFragment : Fragment() {
 
         return binding.root
     }
+
+
 }

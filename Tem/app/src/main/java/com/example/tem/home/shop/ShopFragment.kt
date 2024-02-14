@@ -1,10 +1,12 @@
 package com.example.tem.home.shop
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -32,6 +34,10 @@ class ShopFragment : Fragment(),AdapterView.OnItemSelectedListener, SearchView.O
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentShopBinding.inflate(layoutInflater)
+
+        binding.root.setOnClickListener{
+            hideKeyBoard()
+        }
 
 
         //검색 기록 가져오기
@@ -222,6 +228,13 @@ class ShopFragment : Fragment(),AdapterView.OnItemSelectedListener, SearchView.O
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
 
+    }
+
+    private fun hideKeyBoard(){
+        if(activity != null && requireActivity().currentFocus != null){
+            val inputManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        }
     }
 
 }

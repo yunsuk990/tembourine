@@ -22,12 +22,12 @@ class CustomSpinnerImageAdapter() : BaseAdapter() {
 
     override fun getCount(): Int = values!!.size
 
-    override fun getItem(p0: Int): Any {
-        return p0
+    override fun getItem(p0: Int): Any? {
+        return null
     }
 
     override fun getItemId(p0: Int): Long {
-        return p0.toLong()
+        return 0
     }
 
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {

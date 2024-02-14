@@ -3,7 +3,7 @@ import android.app.Application
 import android.os.Build
 import com.kakao.sdk.common.KakaoSdk
 
-val NATIVE_APP_KEY = "0670cef2ebb2dba78e1fb26489487bb5"
+val NATIVE_APP_KEY = "8d0224465396e18d2a695278c835817b"
 class GlobalApplication : Application() {
 
     companion object {
