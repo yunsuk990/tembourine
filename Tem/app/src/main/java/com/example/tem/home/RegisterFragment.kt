@@ -1,8 +1,8 @@
 package com.example.tem.home
 
-import android.app.Activity
 import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
@@ -14,7 +14,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,11 +23,11 @@ import android.widget.CompoundButton
 import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -43,6 +42,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
+
 class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var binding: FragmentRegisterBinding
     private val cycle= mutableListOf<String>()
@@ -53,7 +53,7 @@ class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     var startCalendar: Calendar? = null
     var endCalendar: Calendar? = null
     var spinnerPos: Int? = null
-
+    lateinit var dialog01: Dialog
     lateinit var resultLauncher: ActivityResultLauncher<Intent>
     lateinit var resultLauncher_g: ActivityResultLauncher<Intent>
     companion object{
@@ -108,6 +108,7 @@ class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     }
                 }
             }
+
         resultLauncher_g=
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
                 if(it.resultCode== AppCompatActivity.RESULT_OK){
@@ -125,18 +126,16 @@ class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     }
                 }
             }
+
         arguments?.let {
             title=it.getString(ARG_TITLE)
             Log.d("위치",title.toString())
         }
-        binding.regImg.setOnClickListener {
-            //requestGallary()
-            requestPermission()
-        }
 
+        /*
         if(title!=null){
             binding.placeItem.text=title
-        }
+        }*/
 
         // 알람 주기 설정
         val spinner:Spinner=binding.spinReg
@@ -199,7 +198,19 @@ class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             }
 
         }
-
+        dialog01=Dialog(requireContext())
+        dialog01.setContentView(R.layout.cameradialog)
+        binding.regImg.setOnClickListener {
+            dialog01.show()
+            dialog01.findViewById<TextView>(R.id.camera).setOnClickListener {
+                requestPermission()
+                dialog01.dismiss()
+            }
+            dialog01.findViewById<TextView>(R.id.gallary).setOnClickListener {
+                requestGallary()
+                dialog01.dismiss()
+            }
+        }
         return view
     }
     private fun requestGallary() {
@@ -211,13 +222,14 @@ class RegisterFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
                 Toast.makeText(requireContext(), "갤러리 권한이 거부 되었습니다.", Toast.LENGTH_SHORT).show()
+
             }
         }
         TedPermission.create()
             .setPermissionListener(permission)
             .setDeniedMessage("갤러리 권한을 허용해 주세요")
-            .setPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            .setPermissions(
+                android.Manifest.permission.READ_MEDIA_IMAGES)
             .check()
     }
 
