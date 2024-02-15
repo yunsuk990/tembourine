@@ -37,6 +37,38 @@
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/back_btn"
         app:layout_constraintBottom_toBottomOf="parent"/>
+    <RelativeLayout
+        android:id="@+id/if_empty"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        >
+        <TextView
+            android:id="@+id/txt_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="쇼핑에서 북마크를"
+            android:textSize="20sp"
+            android:layout_centerInParent="true"
+            android:textColor="#A1A1A1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="추가해주세요"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/txt_1"
+            android:textColor="#A1A1A1"/>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/txt_1"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/mood_empty"/>
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
