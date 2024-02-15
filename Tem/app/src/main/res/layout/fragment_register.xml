@@ -42,16 +42,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-
-
     <EditText
         android:id="@+id/item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/rec_1"
-        android:gravity="center"
         android:hint="상품명"
-        android:padding="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
         android:textSize="15sp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="40dp"
@@ -66,12 +65,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:background="@drawable/rec_1"
-        android:gravity="center"
         android:hint="구입한 날짜"
-        android:padding="5dp"
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@+id/item_name"
-        app:layout_constraintLeft_toLeftOf="@id/item_name"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="@+id/item_name"
         app:layout_constraintTop_toBottomOf="@id/item_name" />
@@ -82,9 +83,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:background="@drawable/rec_1"
-        android:gravity="center"
+        android:textColor="@color/black"
         android:hint="사용 기한"
-        android:padding="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="@+id/item_buy"
         app:layout_constraintLeft_toLeftOf="@id/item_name"
@@ -161,13 +164,14 @@
         android:layout_marginRight="30dp"
         android:thumb="@drawable/switch_thumb"
         android:track="@drawable/selector_switch"
+        android:switchMinWidth="50dp"
         app:layout_constraintBottom_toBottomOf="@id/txt_1"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/txt_1" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/setting_notify_cl"
-        android:visibility="gone"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

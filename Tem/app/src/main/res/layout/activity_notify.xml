@@ -70,7 +70,6 @@
 
             <TextView
                 android:text="반복 알림"
-                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:layout_gravity="center"
