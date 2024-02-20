@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,8 +57,9 @@ class LogoutCustomDialog: DialogFragment() {
     }
 
     private fun logOut(){
-        UserApiClient.instance.logout {
-            startActivity(Intent(context, StartActivity::class.java))
+        UserApiClient.instance.logout { error ->
+
         }
+        startActivity(Intent(context, StartActivity::class.java))
     }
 }

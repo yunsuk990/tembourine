@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.tem.BookmarkFir
 import com.example.tem.BookmarkSec
 import com.example.tem.ItemAdapter
 import com.example.tem.ItemData
 import com.example.tem.R
+import com.example.tem.SwipeToDeleteCallback
 import com.example.tem.databinding.FragmentBookmarkBinding
+import org.apache.commons.lang3.ObjectUtils.Null
 
 class BookmarkFragment : Fragment() {
     private lateinit var binding: FragmentBookmarkBinding
@@ -57,7 +61,20 @@ class BookmarkFragment : Fragment() {
             changeFragment(HomeFragment(),"1")
         }
         initRecycler()
-        binding.itemRv.layoutManager = LinearLayoutManager(requireContext())
+
+        val swipeToDeleteCallback=SwipeToDeleteCallback().apply {
+            setClamp(300f)
+        }
+        val itemTouchHelper=ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(binding.itemRv)
+        binding.itemRv.apply {
+            layoutManager=LinearLayoutManager(requireContext())
+            setOnTouchListener { view, motionEvent ->
+                swipeToDeleteCallback.removePreviousClamp(this)
+                false
+            }
+            updateIfEmptyVisibility()
+        }
         return view
     }
     private fun initRecycler() {
@@ -74,6 +91,13 @@ class BookmarkFragment : Fragment() {
             Log.d("chk",datas.size.toString())
             Log.d("ch",datas.first().name)
 
+        }
+    }
+    private fun updateIfEmptyVisibility() {
+        if (itemAdapter.datas.isEmpty()) {
+            binding.ifEmpty.visibility = View.VISIBLE
+        } else {
+            binding.ifEmpty.visibility = View.GONE
         }
     }
 }

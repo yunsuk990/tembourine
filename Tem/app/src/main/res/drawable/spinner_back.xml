@@ -2,6 +2,6 @@
     android:shape="rectangle">
     <solid android:color="@color/white" /> <!-- 검은색 --><!-- 테두리의 라운드 처리를 위한 설정 (선택사항) -->
     <stroke
-        android:width="2dp"
+        android:width="0.5dp"
         android:color="#000000" /> <!-- 테두리의 색상 -->
 </shape>

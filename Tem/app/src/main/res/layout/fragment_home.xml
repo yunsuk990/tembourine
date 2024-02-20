@@ -353,7 +353,6 @@
         android:id="@+id/show_detail"
         android:layout_width="22dp"
         android:layout_height="22dp"
-
         android:src="@drawable/list_arrow"
         app:layout_constraintBottom_toBottomOf="@id/my_icon"
         app:layout_constraintLeft_toRightOf="@id/my_rv"
@@ -373,8 +372,8 @@
     <ImageView
         android:visibility="gone"
         android:id="@+id/add"
-        android:layout_width="17dp"
-        android:layout_height="17dp"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
         app:layout_constraintBottom_toTopOf="@id/item_title"
         app:layout_constraintLeft_toLeftOf="@id/my_rv"
         app:layout_constraintRight_toRightOf="@id/my_rv"
