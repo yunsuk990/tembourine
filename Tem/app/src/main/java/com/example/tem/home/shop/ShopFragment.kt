@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
+import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -67,6 +68,11 @@ class ShopFragment : Fragment(),AdapterView.OnItemSelectedListener, SearchView.O
                 }
             }
         }
+
+        binding.submitIv.setOnClickListener {
+            binding.shopSv.setQuery(binding.shopSv.query.toString(), true)
+        }
+
         handleSearchViewUi()
 
         binding.shopBackIv.setOnClickListener {
@@ -177,7 +183,7 @@ class ShopFragment : Fragment(),AdapterView.OnItemSelectedListener, SearchView.O
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        Log.d("onQueryTextChange", "onQueryTextSubmit() called / query: $newText")
+        Log.d("onQueryTextChange", "onQueryTextChange() called / query: $newText")
         return true
     }
 
